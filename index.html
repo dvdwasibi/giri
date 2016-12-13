@@ -8,12 +8,26 @@
     <h1>Welcome to Jiri UI</h1>
     <img alt="Jiří Šimša" width="200" height="200" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/074/231/29d8bfc.jpg">
     <br>
-    <button id="jiri-update-button">
-      Do a JIRI Update
-    </button>
-    <div id="status"></div>
-    <div id="status-text"></div>
-    <table id="project-table"></table>
+    <div id="jiri-update">
+      <button v-on:click="handleJiriUpdate" v-attr:disabled="isUpdating">
+        Jiri Update
+      </button>
+      <div v-if="isUpdating">
+        Jiri is updating
+        <div>
+          <pre>{{updateStatus}}</pre>
+        </div>
+      </div>
+      <div v-if="isSuccessfulUpdate">
+        Update Completed!
+      </div>
+      <div v-if="isFailedUpdated">
+        Update Failed!
+        <div>
+          {{updateError}}
+        </div>
+      </div>
+    </div>
   </body>
 
   <script>
