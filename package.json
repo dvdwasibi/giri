@@ -8,7 +8,6 @@
   },
   "repository": "https://github.com/dvdwasibi/giri",
   "author": "dayang@google.com",
-  "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^1.4.1",
     "vue": "^1.0.17"
