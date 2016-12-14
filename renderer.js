@@ -1,6 +1,7 @@
 'use strict';
 const spawn = require( 'child_process' ).spawn;
 const Vue = require('./node_modules/vue/dist/vue.js');
+const jiri = require('./jiri_util.js');
 
 new Vue({
 
@@ -44,4 +45,25 @@ new Vue({
       });
     }
   }
+});
+
+
+new Vue({
+  el: '#jiri-projects',
+
+  data: {
+    projects: []
+  },
+
+  ready: function() {
+    jiri.getProjects()
+      .then((projectList) => {
+        this.projects = projectList;
+      }, (error) => {
+        // TODO(dvdwasibi): Handle Error Case
+        console.log(error);
+      });
+  },
+
+
 });

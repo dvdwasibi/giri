@@ -8,6 +8,8 @@
     <h1>Welcome to Jiri UI</h1>
     <img alt="Jiří Šimša" width="200" height="200" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/074/231/29d8bfc.jpg">
     <br>
+
+    <!-- Jiri Update Section -->
     <div id="jiri-update">
       <button v-on:click="handleJiriUpdate" v-attr:disabled="isUpdating">
         Jiri Update
@@ -28,6 +30,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Jiri Project Status -->
+    <div id="jiri-projects">
+      <table>
+        <tr>
+          <th>Project</th>
+          <th>Path</th>
+          <th>Remote</th>
+        </tr v-for="project in projects">
+          <td>{{project.name}}</td>
+          <td>{{project.path}}</td>
+          <td>{{project.remote}}</td>
+        <tr>
+        </tr>
+      </table>
+    </div>
+
+
+
   </body>
 
   <script>
