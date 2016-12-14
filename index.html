@@ -11,7 +11,7 @@
 
     <!-- Jiri Update Section -->
     <div id="jiri-update">
-      <button v-on:click="handleJiriUpdate" v-attr:disabled="isUpdating">
+      <button v-on:click="handleJiriUpdate">
         Jiri Update
       </button>
       <div v-if="isUpdating">
@@ -33,17 +33,18 @@
 
     <!-- Jiri Project Status -->
     <div id="jiri-projects">
-      <table>
+
+      <table style="width: 100%">
         <tr>
           <th>Project</th>
           <th>Path</th>
           <th>Remote</th>
-        </tr v-for="project in projects">
+        </tr>
+        <tr  v-for="project in projects">
           <td>{{project.name}}</td>
           <td>{{project.path}}</td>
           <td>{{project.remote}}</td>
         <tr>
-        </tr>
       </table>
     </div>
 

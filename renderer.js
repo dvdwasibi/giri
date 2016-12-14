@@ -56,14 +56,21 @@ new Vue({
   },
 
   ready: function() {
+
+    // Retrieve projects from cache(if it exists)
+    var cachedProjects = window.localStorage.getItem('projects');
+    if(cachedProjects) {
+      this.projects = JSON.parse(cachedProjects);
+    }
+
+    // Use Jiri to get the most recent project info
     jiri.getProjects()
       .then((projectList) => {
+        window.localStorage.setItem('projects', JSON.stringify(projectList));
         this.projects = projectList;
+        console.log('retrieved');
       }, (error) => {
         // TODO(dvdwasibi): Handle Error Case
-        console.log(error);
       });
   },
-
-
 });
