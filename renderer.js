@@ -1,8 +1,15 @@
 'use strict';
+
 const spawn = require( 'child_process' ).spawn;
 const Vue = require('./node_modules/vue/dist/vue.js');
 const jiri = require('./jiri_util.js');
 const git = require('./git_util.js');
+const platform = require('os').platform;
+const terminalConfig = require('./terminal_config.js').config;
+const exec = require('child_process').exec;
+
+
+var shell = require('electron').shell;
 
 new Vue({
 
@@ -53,7 +60,8 @@ new Vue({
   el: '#jiri-projects',
 
   data: {
-    projects: []
+    projects: [],
+    hasUpdatedSyncStatus: false,
   },
 
   ready: function() {
@@ -71,10 +79,48 @@ new Vue({
         return jiri.getMasterSyncStatus(projectList);
       }).then((projectList) => {
         this.projects = projectList;
+        this.hasUpdatedSyncStatus = true;
       }).catch((error) => {
         //TODO(dvdwasibi): Error Handling
-        console.log(error);
-        console.log(error.stack);
       });
   },
+
+  methods: {
+    openRemoteUrl: function(url, event) {
+      event.preventDefault();
+      shell.openExternal(this.href);
+    },
+    openPathInTerminal: function(path) {
+      var app, args, cmdline, runDirectly, setWorkingDirectory, surpressDirArg;
+      app = terminalConfig.app.default;
+      args = terminalConfig.args.default;
+      setWorkingDirectory = terminalConfig.setWorkingDirectory.default;
+      surpressDirArg = terminalConfig.surpressDirectoryArgument.default;
+      runDirectly = terminalConfig.MacWinRunDirectly.default;
+      cmdline = "\"" + app + "\" " + args;
+      if (!surpressDirArg) {
+        cmdline += " \"" + path + "\"";
+      }
+      if (platform() === "darwin" && !runDirectly) {
+        cmdline = "open -a " + cmdline;
+      }
+      if (platform() === "win32" && !runDirectly) {
+        cmdline = "start \"\" " + cmdline;
+      }
+      console.log('here');
+      console.log(app);
+      if (setWorkingDirectory) {
+        if (path != null) {
+          return exec(cmdline, {
+            cwd: path
+          });
+        }
+      } else {
+        if (path != null) {
+          return exec(cmdline);
+        }
+      }
+    }
+
+  }
 });

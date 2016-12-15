@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>GIRI ... a JIRI UI</title>
   </head>
   <body>
@@ -41,9 +42,17 @@
           <th>Remote</th>
         </tr>
         <tr  v-for="project in projects">
-          <td>{{project.name}}</td>
-          <td>{{project.path}}</td>
-          <td>{{project.remote}}</td>
+          <td>
+            <span v-bind:class="{'synced': hasUpdatedSyncStatus && project.isSynced, 'not-synced': hasUpdatedSyncStatus && !project.isSynced}">
+              {{project.name}}
+            </span>
+          </td>
+          <td>
+            <span v-on:click="openPathInTerminal(project.path)">{{project.path}}</span>
+          </td>
+          <td>
+            <a target="_blank" v-bind:href="project.remote">Link</a>
+          </td>
         <tr>
       </table>
     </div>
