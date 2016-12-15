@@ -5,7 +5,6 @@ const spawn = require( 'child_process' ).spawn;
 
 module.exports.getLocalHeadSHA = function(path) {
   return new Promise((resolve, reject) => {
-    console.log(`cd ${path} && git rev-parse HEAD `);
     var ls = spawn( `cd ${path} && git rev-parse HEAD `, {shell: true});
 
     ls.stderr.on( 'data', code => {

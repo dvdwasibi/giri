@@ -43,15 +43,16 @@ module.exports.getProjects = function() {
 // Adds the sync(master or not for all projects)
 module.exports.getMasterSyncStatus = function(projects) {
 
+  var syncStatusMap = [];
 
-  function getProjectSyncStatus(path) {
+  function getProjectSyncStatus(path, index) {
     return new Promise((resolve, reject) => {
       Promise.all([
         git.getLocalHeadSHA(path),
         git.getRemoteHeadSHA(path)
       ]).then(values => {
-        console.log(values);
-        resolve(values[0] === values[1]);
+        syncStatusMap[index] = values[0] === values[1];
+        resolve();
       })
       .catch(reject);
     });
@@ -59,7 +60,7 @@ module.exports.getMasterSyncStatus = function(projects) {
 
   const generatePromises = function *() {
     for(var i = 0; i<projects.length; i++) {
-      yield getProjectSyncStatus(projects[i].path);
+      yield getProjectSyncStatus(projects[i].path, i);
     }
   }
 
@@ -69,10 +70,9 @@ module.exports.getMasterSyncStatus = function(projects) {
   return new Promise((resolve, reject) => {
     var updatedProjectList;
     const promiseIterator =
-    pool.start().then(values => {
+    pool.start().then(() => {
       var updatedProjectList = projects.map((project, index) => {
-        console.log(values);
-        return Object.assign({isSynced: values[index]}, project);
+        return Object.assign({isSynced: syncStatusMap[index]}, project);
       });
       resolve(updatedProjectList);
     })

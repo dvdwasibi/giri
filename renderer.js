@@ -71,8 +71,8 @@ new Vue({
         return jiri.getMasterSyncStatus(projectList);
       }).then((projectList) => {
         this.projects = projectList;
-        console.log(projectList);
       }).catch((error) => {
+        //TODO(dvdwasibi): Error Handling
         console.log(error);
         console.log(error.stack);
       });
