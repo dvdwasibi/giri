@@ -2,6 +2,7 @@
 const spawn = require( 'child_process' ).spawn;
 const Vue = require('./node_modules/vue/dist/vue.js');
 const jiri = require('./jiri_util.js');
+const git = require('./git_util.js');
 
 new Vue({
 
@@ -56,7 +57,6 @@ new Vue({
   },
 
   ready: function() {
-
     // Retrieve projects from cache(if it exists)
     var cachedProjects = window.localStorage.getItem('projects');
     if(cachedProjects) {
@@ -68,9 +68,13 @@ new Vue({
       .then((projectList) => {
         window.localStorage.setItem('projects', JSON.stringify(projectList));
         this.projects = projectList;
-        console.log('retrieved');
-      }, (error) => {
-        // TODO(dvdwasibi): Handle Error Case
+        return jiri.getMasterSyncStatus(projectList);
+      }).then((projectList) => {
+        this.projects = projectList;
+        console.log(projectList);
+      }).catch((error) => {
+        console.log(error);
+        console.log(error.stack);
       });
   },
 });
