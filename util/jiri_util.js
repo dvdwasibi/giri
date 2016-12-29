@@ -1,9 +1,9 @@
 // Jiri Utility Functions
+'use strict';
 
-// 'use strict';
 const spawn = require( 'child_process' ).spawn;
 const git = require('./git_util.js');
-var PromisePool = require('es6-promise-pool')
+const PromisePool = require('es6-promise-pool')
 
 // Get List of Projects
 module.exports.getProjects = function() {
@@ -68,9 +68,8 @@ module.exports.getMasterSyncStatus = function(projects) {
   const pool = new PromisePool(promiseIterator, 5)
 
   return new Promise((resolve, reject) => {
-    var updatedProjectList;
-    const promiseIterator =
     pool.start().then(() => {
+      // Creae copy of project with updated sync status
       var updatedProjectList = projects.map((project, index) => {
         return Object.assign({isSynced: syncStatusMap[index]}, project);
       });
